@@ -102,6 +102,18 @@ def parse_new_tracks():
 
     return parse_new_tracks_book(xlrd.open_workbook('./data/tracks_new.xls'))
 
+def convert_area_to_radius(track):
+    import math
+    track[:, 0] = np.sqrt(track[:, 0] / math.pi)
+    return track
+
+def convert_to_normal_coords(track):
+    return track * 0.05 * 1e-6
+
+def read_data():
+    data = parse_arsnoc() + parse_new_tracks()
+    return list(map(convert_to_normal_coords, map(convert_area_to_radius, data)))
+
 if __name__ == "__main__":
-    parse_arsnoc()
-    #print(parse_new_tracks())
+    data = read_data()
+    print(data[0])
